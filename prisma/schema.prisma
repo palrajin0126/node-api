@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int             @id @default(autoincrement())
+  firstName   String          @db.VarChar(255)
+  lastName    String          @db.VarChar(255)
+  mobile      String          @unique @db.VarChar(255)
+  email       String          @unique @db.VarChar(255)
+  password    String          @db.VarChar(255)
+  carts       Cart[]
+  orders      CustomerOrder[]
+}
+
+model Cart {
+  id              Int         @id @default(autoincrement())
+  userId          Int
+  user            User        @relation(fields: [userId], references: [id])
+  products        Json
+  totalCartValue  Float
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model CustomerOrder {
+  id                   Int      @id @default(autoincrement())
+  orderNumber          String   @db.VarChar(255)
+  orderItems           Json
+  orderTotal           Float
+  customerName         String   @db.VarChar(255)
+  email                String   @db.VarChar(255)
+  mobile               String   @db.VarChar(255)
+  apartment            String   @db.VarChar(255)
+  block                String   @db.VarChar(255)
+  locality             String   @db.VarChar(255)
+  city                 String   @db.VarChar(255)
+  state                String   @db.VarChar(255)
+  pincode              String   @db.VarChar(255)
+  seller               String   @db.VarChar(255)
+  quantity             Int
+  merchantId           String   @db.VarChar(255)
+  transactionId        String   @db.VarChar(255)
+  providerId           String   @db.VarChar(255)
+  responseCode         String   @db.VarChar(255)
+  amount               Int      // Multiplied by 100
+  providerReferenceId  String   @db.VarChar(255)
+  userId               Int
+  user                 User     @relation(fields: [userId], references: [id])
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
